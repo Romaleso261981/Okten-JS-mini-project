@@ -26,7 +26,7 @@ window.onload = function () {
                 button.classList.add('user-button');
                 button.textContent = 'Details';
                 button.addEventListener('click', () => {
-                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('currentUserId', JSON.stringify(user.id));
                     window.location.href = 'user-details.html';
                 });
                 userDiv.appendChild(button);

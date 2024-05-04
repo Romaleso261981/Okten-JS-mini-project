@@ -1,86 +1,98 @@
 window.onload = function () {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser) {
-        const userDetails = document.querySelector('.user-details');
+    const currentUserId = JSON.parse(localStorage.getItem('currentUserId'));
+    fetch(`https://jsonplaceholder.typicode.com/users/${currentUserId}`)
+        .then((response) => response.json())
+        .then((currentUser) => {
+            console.log("currentUser", currentUser)
 
-        const userId = document.createElement('p');
-        userId.classList.add('text');
-        userId.textContent = `ID: ${currentUser.id}`;
-        userDetails.appendChild(userId);
+            if (currentUser) {
+                const userDetails = document.querySelector('.user-details');
 
-        const userName = document.createElement('p');
-        userName.classList.add('text');
-        userName.textContent = `Name: ${currentUser.name}`;
-        userDetails.appendChild(userName);
+                const userId = document.createElement('p');
+                userId.classList.add('text');
+                userId.textContent = `ID: ${currentUser.id}`;
+                userDetails.appendChild(userId);
 
-        const userUsername = document.createElement('p');
-        userUsername.classList.add('text');
-        userUsername.textContent = `Username: ${currentUser.username}`;
-        userDetails.appendChild(userUsername);
+                const userName = document.createElement('p');
+                userName.classList.add('text');
+                userName.textContent = `Name: ${currentUser.name}`;
+                userDetails.appendChild(userName);
 
-        const userPhone = document.createElement('p');
-        userPhone.classList.add('text');
-        userPhone.textContent = `user-phone: ${currentUser.phone ? currentUser.phone : 'N/A'}`;
-        userDetails.appendChild(userPhone);
+                const userUsername = document.createElement('p');
+                userUsername.classList.add('text');
+                userUsername.textContent = `Username: ${currentUser.username}`;
+                userDetails.appendChild(userUsername);
 
-        const userWebsite = document.createElement('p');
-        userWebsite.classList.add('text');
-        userWebsite.textContent = `user-website: ${currentUser.website ? currentUser.website : 'N/A'}`;
-        userDetails.appendChild(userWebsite);
+                const userPhone = document.createElement('p');
+                userPhone.classList.add('text');
+                userPhone.textContent = `user-phone: ${currentUser.phone ? currentUser.phone : 'N/A'}`;
+                userDetails.appendChild(userPhone);
 
-        const userCompanyBs = document.createElement('p');
-        userCompanyBs.classList.add('text');
-        userCompanyBs.textContent = `user-company-bs: ${currentUser.company.bs ? currentUser.company.bs : 'N/A'}`;
-        userDetails.appendChild(userCompanyBs);
+                const userWebsite = document.createElement('p');
+                userWebsite.classList.add('text');
+                userWebsite.textContent = `user-website: ${currentUser.website ? currentUser.website : 'N/A'}`;
+                userDetails.appendChild(userWebsite);
 
-        const userCompanyCatchPhrase = document.createElement('p');
-        userCompanyCatchPhrase.classList.add('text');
-        userCompanyCatchPhrase.textContent = `user-company-catchPhrase: ${currentUser.company.catchPhrase ? currentUser.company.catchPhrase : 'N/A'}`;
-        userDetails.appendChild(userCompanyCatchPhrase);
+                const userCompanyBs = document.createElement('p');
+                userCompanyBs.classList.add('text');
+                userCompanyBs.textContent = `user-company-bs: ${currentUser.company.bs ? currentUser.company.bs : 'N/A'}`;
+                userDetails.appendChild(userCompanyBs);
 
-        const userCompanyName = document.createElement('p');
-        userCompanyName.classList.add('text');
-        userCompanyName.textContent = `user-company-name: ${currentUser.company.name ? currentUser.company.name : 'N/A'}`;
-        userDetails.appendChild(userCompanyName);
+                const userCompanyCatchPhrase = document.createElement('p');
+                userCompanyCatchPhrase.classList.add('text');
+                userCompanyCatchPhrase.textContent = `user-company-catchPhrase: ${currentUser.company.catchPhrase ? currentUser.company.catchPhrase : 'N/A'}`;
+                userDetails.appendChild(userCompanyCatchPhrase);
 
-        const userAddressCity = document.createElement('p');
-        userAddressCity.classList.add('text');
-        userAddressCity.textContent = `user-address-city: ${currentUser.address.city ? currentUser.address.city : 'N/A'}`;
-        userDetails.appendChild(userAddressCity);
+                const userCompanyName = document.createElement('p');
+                userCompanyName.classList.add('text');
+                userCompanyName.textContent = `user-company-name: ${currentUser.company.name ? currentUser.company.name : 'N/A'}`;
+                userDetails.appendChild(userCompanyName);
 
-        const userAddressStreet = document.createElement('p');
-        userAddressStreet.classList.add('text');
-        userAddressStreet.textContent = `user-address-street: ${currentUser.address.street ? currentUser.address.street : 'N/A'}`;
-        userDetails.appendChild(userAddressStreet);
+                const userAddressCity = document.createElement('p');
+                userAddressCity.classList.add('text');
+                userAddressCity.textContent = `user-address-city: ${currentUser.address.city ? currentUser.address.city : 'N/A'}`;
+                userDetails.appendChild(userAddressCity);
 
-        const userAddressSuite = document.createElement('p');
-        userAddressSuite.classList.add('text');
-        userAddressSuite.textContent = `user-address-suite: ${currentUser.address.suite ? currentUser.address.suite : 'N/A'}`;
-        userDetails.appendChild(userAddressSuite);
+                const userAddressStreet = document.createElement('p');
+                userAddressStreet.classList.add('text');
+                userAddressStreet.textContent = `user-address-street: ${currentUser.address.street ? currentUser.address.street : 'N/A'}`;
+                userDetails.appendChild(userAddressStreet);
 
-        const userAddressZipcode = document.createElement('p');
-        userAddressZipcode.classList.add('text');
-        userAddressZipcode.textContent = `user-address-zipcode: ${currentUser.address.zipcode ? currentUser.address.zipcode : 'N/A'}`;
-        userDetails.appendChild(userAddressZipcode);
+                const userAddressSuite = document.createElement('p');
+                userAddressSuite.classList.add('text');
+                userAddressSuite.textContent = `user-address-suite: ${currentUser.address.suite ? currentUser.address.suite : 'N/A'}`;
+                userDetails.appendChild(userAddressSuite);
 
-        const userAddressGeoLat = document.createElement('p');
-        userAddressGeoLat.classList.add('text');
-        userAddressGeoLat.textContent = `user-address-geo(lat): ${currentUser.address.geo.lat ? currentUser.address.geo.lat : 'N/A'}`;
-        userDetails.appendChild(userAddressGeoLat);
+                const userAddressZipcode = document.createElement('p');
+                userAddressZipcode.classList.add('text');
+                userAddressZipcode.textContent = `user-address-zipcode: ${currentUser.address.zipcode ? currentUser.address.zipcode : 'N/A'}`;
+                userDetails.appendChild(userAddressZipcode);
 
-        const userAddressGeoLng = document.createElement('p');
-        userAddressGeoLng.classList.add('text');
-        userAddressGeoLng.textContent = `user-address-geo(lng): ${currentUser.address.geo.lng ? currentUser.address.geo.lng : 'N/A'}`;
-        userDetails.appendChild(userAddressGeoLng);
+                const userAddressGeoLat = document.createElement('p');
+                userAddressGeoLat.classList.add('text');
+                userAddressGeoLat.textContent = `user-address-geo(lat): ${currentUser.address.geo.lat ? currentUser.address.geo.lat : 'N/A'}`;
+                userDetails.appendChild(userAddressGeoLat);
 
-        const backButton = document.createElement('button');
-        backButton.textContent = 'Back';
-        backButton.addEventListener('click', () => {
-            window.location.href = 'index.html';
+                const userAddressGeoLng = document.createElement('p');
+                userAddressGeoLng.classList.add('text');
+                userAddressGeoLng.textContent = `user-address-geo(lng): ${currentUser.address.geo.lng ? currentUser.address.geo.lng : 'N/A'}`;
+                userDetails.appendChild(userAddressGeoLng);
+
+                const backButton = document.createElement('button');
+                backButton.textContent = 'Back';
+                backButton.addEventListener('click', () => {
+                    window.location.href = 'index.html';
+                });
+                userDetails.appendChild(backButton);
+            } else {
+                // Обробка випадку, коли дані про поточного користувача відсутні в localStorage
+                console.error('Current user data not found.');
+            }
+        })
+        .catch((error) => console.error('Error fetching current user:', error));
+    fetch(`https://jsonplaceholder.typicode.com/posts/${currentUserId}/comments`)
+        .then((response) => response.json())
+        .then((comments) => {
+            console.log("comments", comments)
         });
-        userDetails.appendChild(backButton);
-    } else {
-        // Обробка випадку, коли дані про поточного користувача відсутні в localStorage
-        console.error('Current user data not found.');
-    }
 };

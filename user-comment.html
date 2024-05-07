@@ -6,7 +6,74 @@
 	      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Document</title>
+	<style>
+        .userComment {
+            margin-left: auto;
+            margin-right: auto;
+            width: 90%;
+            display: flex;
+            padding: 10px;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 50px;
+            box-shadow: #cccccc 0 0 10px 0;
+        }
+
+        .commentsTitle {
+            font-weight: 900;
+            color: black;
+            font-family: "Arial Black", Gadget, sans-serif;
+        }
+
+        .text {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0056b3;
+        }
+	</style>
 </head>
 <body>
+<div class="user-comments"></div>
+<script>
+    const currentUserId = JSON.parse(localStorage.getItem('currentUserId'));
+    const currentCommentId = JSON.parse(localStorage.getItem('currentCommentId'));
 
+    fetch(`https://jsonplaceholder.typicode.com/posts/${currentUserId}/comments`)
+        .then(response => response.json())
+        .then(comments => {
+
+            console.log("comments", comments)
+
+            const currentComment = comments.find(comment => comment.id === currentCommentId);
+            const commentDiv = document.querySelector('.user-comments');
+            commentDiv.classList.add('userComment')
+            const userComments = document.createElement('div');
+
+            const userCommentsTitle = document.createElement('h1');
+            userCommentsTitle.classList.add('commentsTitle');
+            userCommentsTitle.textContent = `${currentComment?.name ?? 'No title'}`;
+            userComments.appendChild(userCommentsTitle);
+
+            const commentsBody = document.createElement('p');
+            commentsBody.classList.add('text');
+            commentsBody.textContent = `${currentComment?.body ?? 'No body'}`;
+            userComments.appendChild(commentsBody);
+
+            const commentEmail = document.createElement('p');
+            commentEmail.classList.add('text');
+            commentEmail.textContent = `Email: ${currentComment?.email ?? 'No email'}`;
+            userComments.appendChild(commentEmail);
+
+            const button = document.createElement('button');
+            button.textContent = 'Back';
+            button.onclick = () => {
+                window.location.href = 'user-details.html';
+            }
+            userComments.appendChild(button);
+
+            commentDiv.appendChild(userComments);
+
+        });
+</script>
 </body>

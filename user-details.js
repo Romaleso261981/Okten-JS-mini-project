@@ -3,7 +3,6 @@ window.onload = function () {
     fetch(`https://jsonplaceholder.typicode.com/users/${currentUserId}`)
         .then((response) => response.json())
         .then((currentUser) => {
-            console.log("currentUser", currentUser)
             if (currentUser) {
                 const userDetails = document.querySelector('.user-details');
 
@@ -91,19 +90,20 @@ window.onload = function () {
     fetch(`https://jsonplaceholder.typicode.com/posts/${currentUserId}/comments`)
         .then((response) => response.json())
         .then((comments) => {
-            console.log("comments", comments)
             if (comments) {
                 const usersChats = document.querySelector('.users-chats');
+                usersChats.classList.add('user-comments-wrapper');
                 comments.map((comment) => {
                         const userComments = document.createElement('div');
                         userComments.classList.add('user-comments');
                         userComments.addEventListener('click', () => {
+                            localStorage.setItem('currentCommentId', JSON.stringify(comment.id));
                             window.location.href = 'user-comment.html';
                         });
 
                         const userCommentsId = document.createElement('p');
                         userCommentsId.classList.add('text');
-                        userCommentsId.textContent = `ID: ${comment.id}`;
+                        userCommentsId.textContent = `Title: ${comment.name}`;
                         userComments.appendChild(userCommentsId);
 
                         const userCommentsBody = document.createElement('p');

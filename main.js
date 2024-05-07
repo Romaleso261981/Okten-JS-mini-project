@@ -2,7 +2,6 @@ window.onload = function () {
     fetch('https://jsonplaceholder.typicode.com/users')
         .then(response => response.json())
         .then(data => {
-            console.log('Data fetched successfully', data)
             const container = document.querySelector('.container');
             container.classList.add('container');
 

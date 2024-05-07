@@ -1,6 +1,15 @@
-.container {
+.wrapper {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .user {
@@ -54,4 +63,16 @@
 
 .back-button:hover {
     background-color: #0056b3;
+}
+
+.user-comments {
+    max-width: 80vw;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    cursor: pointer;
+
 }

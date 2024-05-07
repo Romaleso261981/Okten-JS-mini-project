@@ -4,7 +4,6 @@ window.onload = function () {
         .then((response) => response.json())
         .then((currentUser) => {
             console.log("currentUser", currentUser)
-
             if (currentUser) {
                 const userDetails = document.querySelector('.user-details');
 
@@ -45,37 +44,37 @@ window.onload = function () {
 
                 const userCompanyName = document.createElement('p');
                 userCompanyName.classList.add('text');
-                userCompanyName.textContent = `user-company-name: ${currentUser.company.name ? currentUser.company.name : 'N/A'}`;
+                userCompanyName.textContent = `user-company-name: ${currentUser.company.name ?? 'N/A'}`;
                 userDetails.appendChild(userCompanyName);
 
                 const userAddressCity = document.createElement('p');
                 userAddressCity.classList.add('text');
-                userAddressCity.textContent = `user-address-city: ${currentUser.address.city ? currentUser.address.city : 'N/A'}`;
+                userAddressCity.textContent = `user-address-city: ${currentUser.address.city ?? 'N/A'}`;
                 userDetails.appendChild(userAddressCity);
 
                 const userAddressStreet = document.createElement('p');
                 userAddressStreet.classList.add('text');
-                userAddressStreet.textContent = `user-address-street: ${currentUser.address.street ? currentUser.address.street : 'N/A'}`;
+                userAddressStreet.textContent = `user-address-street: ${currentUser.address.street ?? 'N/A'}`;
                 userDetails.appendChild(userAddressStreet);
 
                 const userAddressSuite = document.createElement('p');
                 userAddressSuite.classList.add('text');
-                userAddressSuite.textContent = `user-address-suite: ${currentUser.address.suite ? currentUser.address.suite : 'N/A'}`;
+                userAddressSuite.textContent = `user-address-suite: ${currentUser.address.suite ?? 'N/A'}`;
                 userDetails.appendChild(userAddressSuite);
 
                 const userAddressZipcode = document.createElement('p');
                 userAddressZipcode.classList.add('text');
-                userAddressZipcode.textContent = `user-address-zipcode: ${currentUser.address.zipcode ? currentUser.address.zipcode : 'N/A'}`;
+                userAddressZipcode.textContent = `user-address-zipcode: ${currentUser.address.zipcode ?? 'N/A'}`;
                 userDetails.appendChild(userAddressZipcode);
 
                 const userAddressGeoLat = document.createElement('p');
                 userAddressGeoLat.classList.add('text');
-                userAddressGeoLat.textContent = `user-address-geo(lat): ${currentUser.address.geo.lat ? currentUser.address.geo.lat : 'N/A'}`;
+                userAddressGeoLat.textContent = `user-address-geo(lat): ${currentUser.address.geo.lat ?? 'N/A'}`;
                 userDetails.appendChild(userAddressGeoLat);
 
                 const userAddressGeoLng = document.createElement('p');
                 userAddressGeoLng.classList.add('text');
-                userAddressGeoLng.textContent = `user-address-geo(lng): ${currentUser.address.geo.lng ? currentUser.address.geo.lng : 'N/A'}`;
+                userAddressGeoLng.textContent = `user-address-geo(lng): ${currentUser.address.geo.lng ?? 'N/A'}`;
                 userDetails.appendChild(userAddressGeoLng);
 
                 const backButton = document.createElement('button');
@@ -85,7 +84,6 @@ window.onload = function () {
                 });
                 userDetails.appendChild(backButton);
             } else {
-                // Обробка випадку, коли дані про поточного користувача відсутні в localStorage
                 console.error('Current user data not found.');
             }
         })
@@ -94,5 +92,39 @@ window.onload = function () {
         .then((response) => response.json())
         .then((comments) => {
             console.log("comments", comments)
+            if (comments) {
+                const usersChats = document.querySelector('.users-chats');
+                comments.map((comment) => {
+                        const userComments = document.createElement('div');
+                        userComments.classList.add('user-comments');
+                        userComments.addEventListener('click', () => {
+                            window.location.href = 'user-comment.html';
+                        });
+
+                        const userCommentsId = document.createElement('p');
+                        userCommentsId.classList.add('text');
+                        userCommentsId.textContent = `ID: ${comment.id}`;
+                        userComments.appendChild(userCommentsId);
+
+                        const userCommentsBody = document.createElement('p');
+                        userCommentsBody.classList.add('text');
+                        userCommentsBody.textContent = `Message: ${comment.body}`;
+                        userComments.appendChild(userCommentsBody);
+
+                        usersChats.appendChild(userComments);
+
+                        const backButton = document.createElement('button');
+                        backButton.textContent = 'details';
+                        backButton.addEventListener('click', () => {
+                            window.location.href = 'index.html';
+                        });
+
+                        userComments.appendChild(backButton);
+                    }
+                );
+
+            } else {
+                console.error('Current users comments data not found.');
+            }
         });
 };

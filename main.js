@@ -33,7 +33,7 @@ window.onload = function () {
                 userDiv.appendChild(userTitle);
 
                 const button = document.createElement('button');
-                button.classList.add('user-button');
+                button.classList.add('userDetail-button');
                 button.textContent = 'Details';
                 button.addEventListener('click', () => {
                     localStorage.setItem('currentUserId', JSON.stringify(user.id));

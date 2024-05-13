@@ -5,78 +5,58 @@ window.onload = function () {
         .then((currentUser) => {
             if (currentUser) {
                 const userDetails = document.querySelector('.user-details');
+                const mainTitleWrapper = document.querySelector('.main-title');
+                mainTitleWrapper.classList.add('main-title-wrapper');
 
-                const userId = document.createElement('p');
-                userId.classList.add('text');
-                userId.textContent = `ID: ${currentUser.id}`;
-                userDetails.appendChild(userId);
+                const mainTitle = document.createElement('h1');
+                mainTitle.classList.add('main-title');
+                mainTitle.textContent = `User Details: ${currentUser.name}`;
 
-                const userName = document.createElement('p');
-                userName.classList.add('text');
-                userName.textContent = `Name: ${currentUser.name}`;
-                userDetails.appendChild(userName);
+                mainTitleWrapper.appendChild(mainTitle);
 
-                const userUsername = document.createElement('p');
-                userUsername.classList.add('text');
-                userUsername.textContent = `Username: ${currentUser.username}`;
-                userDetails.appendChild(userUsername);
+                const renderFunction = (clasName, value, label, labelClassName) => {
+                    const elementWrapper = document.createElement('div');
+                    const element = document.createElement('p');
+                    const labelElement = document.createElement('span');
+                    labelElement.classList.add(labelClassName);
+                    labelElement.textContent = `${label}:`;
+                    element.classList.add(clasName);
+                    element.textContent = `${value ? value : 'N/A'}`;
+                    elementWrapper.appendChild(labelElement);
+                    elementWrapper.appendChild(element);
+                    userDetails.appendChild(elementWrapper);
+                }
 
-                const userPhone = document.createElement('p');
-                userPhone.classList.add('text');
-                userPhone.textContent = `user-phone: ${currentUser.phone ? currentUser.phone : 'N/A'}`;
-                userDetails.appendChild(userPhone);
+                renderFunction('text', currentUser.id, 'ID', 'label');
 
-                const userWebsite = document.createElement('p');
-                userWebsite.classList.add('text');
-                userWebsite.textContent = `user-website: ${currentUser.website ? currentUser.website : 'N/A'}`;
-                userDetails.appendChild(userWebsite);
+                renderFunction('text', currentUser.address.city, 'City', 'label');
 
-                const userCompanyBs = document.createElement('p');
-                userCompanyBs.classList.add('text');
-                userCompanyBs.textContent = `user-company-bs: ${currentUser.company.bs ? currentUser.company.bs : 'N/A'}`;
-                userDetails.appendChild(userCompanyBs);
+                renderFunction('text', currentUser.company.bs, 'Company BS', 'label');
 
-                const userCompanyCatchPhrase = document.createElement('p');
-                userCompanyCatchPhrase.classList.add('text');
-                userCompanyCatchPhrase.textContent = `user-company-catchPhrase: ${currentUser.company.catchPhrase ? currentUser.company.catchPhrase : 'N/A'}`;
-                userDetails.appendChild(userCompanyCatchPhrase);
+                renderFunction('text', currentUser.name, 'Name', 'label');
 
-                const userCompanyName = document.createElement('p');
-                userCompanyName.classList.add('text');
-                userCompanyName.textContent = `user-company-name: ${currentUser.company.name ?? 'N/A'}`;
-                userDetails.appendChild(userCompanyName);
+                renderFunction('text', currentUser.address.street, 'Street', 'label');
 
-                const userAddressCity = document.createElement('p');
-                userAddressCity.classList.add('text');
-                userAddressCity.textContent = `user-address-city: ${currentUser.address.city ?? 'N/A'}`;
-                userDetails.appendChild(userAddressCity);
+                renderFunction('text', currentUser.company.catchPhrase, 'Company Catch Phrase', 'label');
 
-                const userAddressStreet = document.createElement('p');
-                userAddressStreet.classList.add('text');
-                userAddressStreet.textContent = `user-address-street: ${currentUser.address.street ?? 'N/A'}`;
-                userDetails.appendChild(userAddressStreet);
+                renderFunction('text', currentUser.username, 'Username', 'label');
 
-                const userAddressSuite = document.createElement('p');
-                userAddressSuite.classList.add('text');
-                userAddressSuite.textContent = `user-address-suite: ${currentUser.address.suite ?? 'N/A'}`;
-                userDetails.appendChild(userAddressSuite);
+                renderFunction('text', currentUser.company.name, 'Company Name', 'label');
 
-                const userAddressZipcode = document.createElement('p');
-                userAddressZipcode.classList.add('text');
-                userAddressZipcode.textContent = `user-address-zipcode: ${currentUser.address.zipcode ?? 'N/A'}`;
-                userDetails.appendChild(userAddressZipcode);
+                renderFunction('text', currentUser.address.suite, 'Suite', 'label');
 
-                const userAddressGeoLat = document.createElement('p');
-                userAddressGeoLat.classList.add('text');
-                userAddressGeoLat.textContent = `user-address-geo(lat): ${currentUser.address.geo.lat ?? 'N/A'}`;
-                userDetails.appendChild(userAddressGeoLat);
+                renderFunction('text', currentUser.website, 'Website', 'label');
 
-                const userAddressGeoLng = document.createElement('p');
-                userAddressGeoLng.classList.add('text');
-                userAddressGeoLng.textContent = `user-address-geo(lng): ${currentUser.address.geo.lng ?? 'N/A'}`;
-                userDetails.appendChild(userAddressGeoLng);
+                renderFunction('text', currentUser.address.geo.lat, 'user-address-geo(lat)', 'label');
+
+                renderFunction('text', currentUser.address.zipcode, 'Zipcode', 'label');
+
+                renderFunction('text', currentUser.email, 'Email', 'label');
+
+                renderFunction('text', currentUser.address.geo.lng, 'user-address-geo(lng)', 'label');
 
                 const backButton = document.createElement('button');
+                backButton.classList.add('userDetail-button');
                 backButton.textContent = 'Back';
                 backButton.addEventListener('click', () => {
                     window.location.href = 'index.html';
@@ -91,35 +71,32 @@ window.onload = function () {
         .then((response) => response.json())
         .then((comments) => {
             if (comments) {
-                const usersChats = document.querySelector('.users-chats');
-                usersChats.classList.add('user-comments-wrapper');
-                comments.map((comment) => {
-                        const userComments = document.createElement('div');
-                        userComments.classList.add('user-comments');
-                        userComments.addEventListener('click', () => {
-                            localStorage.setItem('currentCommentId', JSON.stringify(comment.id));
-                            window.location.href = 'user-comment.html';
-                        });
+                const usersPosts = document.querySelector('.users-posts');
+                usersPosts.classList.add('user-posts-wrapper');
 
-                        const userCommentsId = document.createElement('p');
-                        userCommentsId.classList.add('text');
-                        userCommentsId.textContent = `Title: ${comment.name}`;
-                        userComments.appendChild(userCommentsId);
+                const userPostsTitle = document.createElement('h1');
+                userPostsTitle.classList.add('user-posts-title');
+                userPostsTitle.textContent = 'User Comments';
 
-                        const userCommentsBody = document.createElement('p');
-                        userCommentsBody.classList.add('text');
-                        userCommentsBody.textContent = `Message: ${comment.body}`;
-                        userComments.appendChild(userCommentsBody);
+                usersPosts.appendChild(userPostsTitle);
 
-                        usersChats.appendChild(userComments);
+                const renderPosts = (clasName, value, comment, index) => {
+                    const userComment = document.createElement('div');
+                    userComment.classList.add('user-comments');
+                    userComment.addEventListener('click', () => {
+                        localStorage.setItem('currentCommentId', JSON.stringify(comment.id));
+                        window.location.href = 'user-comment.html';
+                    });
+                    const element = document.createElement('h1');
+                    const number = document.createElement('span');
+                    element.classList.add(clasName);
+                    element.textContent = `${index + 1}:  ${value ? value : 'N/A'}`;
+                    userComment.appendChild(element);
+                    usersPosts.appendChild(userComment);
+                }
 
-                        const backButton = document.createElement('button');
-                        backButton.textContent = 'details';
-                        backButton.addEventListener('click', () => {
-                            window.location.href = 'index.html';
-                        });
-
-                        userComments.appendChild(backButton);
+                comments.map((comment, index) => {
+                        renderPosts('text', comment.name, comment, index);
                     }
                 );
 

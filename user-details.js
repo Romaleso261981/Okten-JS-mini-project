@@ -6,7 +6,7 @@ window.onload = function () {
     if (usersPosts.classList.contains("hidden")) {
       commentsButton.textContent = "Comments";
     } else {
-      commentsButton.textContent = "Hide Comments";
+      commentsButton.textContent = "Hide";
     }
   };
 

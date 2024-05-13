@@ -103,12 +103,11 @@ window.onload = function () {
         .then((comments) => {
             if (comments) {
                 const usersPosts = findElement(".users-posts", ["hidden", "users-posts", "user-posts-wrapper"]);
-                const userPostsTitle = document.createElement("h1", ["user-posts-title"], "User Comments");
+                const userPostsTitle = createElement("h1", ["user-posts-title"], "User Comments");
                 usersPosts.appendChild(userPostsTitle);
 
                 const renderPosts = (clasName, comment, index) => {
-                    const userComment = document.createElement("div");
-                    userComment.classList.add("user-comments");
+                    const userComment = createElement("div", ["user-comments"], "");
                     userComment.addEventListener("click", () => {
                         localStorage.setItem(
                             "currentCommentId",
@@ -116,12 +115,9 @@ window.onload = function () {
                         );
                         window.location.href = "user-comment.html";
                     });
-                    const element = document.createElement("h1");
-                    const number = document.createElement("span");
-                    element.classList.add(clasName);
-                    element.textContent = `${index + 1}:  ${
-                        comment.title ? comment.title : "N/A"
-                    }`;
+                    const element = createElement("h1", [clasName], `${index + 1}:  ${
+                        comment.title ?? "N/A"
+                    }`);
                     userComment.appendChild(element);
                     usersPosts.appendChild(userComment);
                 };

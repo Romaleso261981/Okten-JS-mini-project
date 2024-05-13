@@ -1,67 +1,134 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport"
-	      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Document</title>
-	<style>
-        .userComment {
-            margin-left: auto;
-            margin-right: auto;
-            width: 90%;
-            display: flex;
-            padding: 10px;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            margin-top: 50px;
-            box-shadow: #cccccc 0 0 10px 0;
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      p {
+        margin: 0;
+        color: inherit;
+      }
+      .user-comment {
+        margin-left: auto;
+        margin-right: auto;
+        width: 90%;
+        display: flex;
+        padding: 10px;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: row;
+        margin-top: 50px;
+        box-shadow: #cccccc 0 0 10px 0;
+      }
 
-        .commentsTitle {
-            font-weight: 900;
-            color: black;
-            font-family: "Arial Black", Gadget, sans-serif;
-        }
+      .commentsTitle {
+        font-weight: 900;
+        color: black;
+        font-family: "Arial Black", Gadget, sans-serif;
+      }
 
-        .text {
-            font-size: 20px;
-            font-weight: 600;
-            color: #0056b3;
-        }
-	</style>
-</head>
-<body>
-<div class="user-comments"></div>
-<script>
-    const currentUserId = JSON.parse(localStorage.getItem('currentUserId'));
-    const currentCommentId = JSON.parse(localStorage.getItem('currentCommentId'));
+      .text {
+        font-size: 20px;
+        font-weight: 600;
+        color: #0056b3;
+      }
 
-    const renderComment = (value, className) => {
-        const commentWrapper = document.querySelector('.user-comments');
-        const comment = document.createElement('div');
+      .num {
+        margin-right: 10px;
+        font-size: 30px;
+        font-weight: 800;
+        color: #343638;
+        margin-right: 10px;
+      }
+
+      .num:last-child {
+        margin-right: 0;
+      }
+
+      .userDetail-button {
+        width: 100px;
+        height: 40px;
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .user-comments {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100vw;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="user-comments"></div>
+    <script>
+      const currentUserId = JSON.parse(localStorage.getItem("currentUserId"));
+      const currentCommentId = JSON.parse(
+        localStorage.getItem("currentCommentId")
+      );
+
+      const renderComment = (value, className, commentId) => {
+        const comment = document.createElement("div");
+        const text = document.createElement("p");
+        const num = document.createElement("span");
+        num.classList.add("num");
+        num.textContent = commentId;
+        text.classList.add("text");
+        text.textContent = value;
         comment.classList.add(className);
-        comment.textContent = value;
-        return commentWrapper.appendChild(comment);
-    }
+        comment.appendChild(num);
+        comment.appendChild(text);
+        return comment;
+      };
 
-    fetch(`https://jsonplaceholder.typicode.com/posts/${currentUserId}/comments`)
-        .then(response => response.json())
-        .then(comments => {
+      fetch(
+        `https://jsonplaceholder.typicode.com/posts/${currentCommentId}/comments`
+      )
+        .then((response) => response.json())
+        .then((comments) => {
+          console.log("comments", comments);
 
-            console.log("comments", comments)
+          const commentsDiv = document.querySelector(".user-comments");
 
-            const commentsDiv = document.querySelector('.user-comments');
-            commentsDiv.classList.add('userComments')
-            const userComments = document.createElement('div');
-            userComments.classList.add('commentsTitle');
-            userComments.innerHTML = 'Comments';
+          const commentsTitle = document.createElement("h1");
+          commentsTitle.classList.add("commentsTitle");
+          commentsTitle.innerHTML = "Comments";
 
-            comments.forEach(comment => {
-                commentsDiv.appendChild(renderComment(comment.body, 'userComment'));
-            });
+          const backButton = document.createElement("button");
+          backButton.classList.add("userDetail-button");
+          backButton.textContent = "Back";
+          backButton.addEventListener("click", () => {
+            window.location.href = "user-details.html";
+          });
+
+          commentsDiv.appendChild(commentsTitle);
+          commentsDiv.appendChild(backButton);
+
+          comments.forEach((comment) => {
+            commentsDiv.appendChild(
+              renderComment(comment.body, "user-comment", comment.id)
+            );
+          });
         });
-</script>
-</body>
+    </script>
+  </body>
+</html>

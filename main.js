@@ -1,53 +1,84 @@
+const createElement = (typeElement, classLists, content) => {
+  const element = document.createElement(typeElement);
+  if (classLists && Array.isArray(classLists)) {
+    classLists.map((classList) => {
+      element.classList.add(classList);
+    });
+  }
+  element.textContent = content;
+  return element;
+};
+
+const setLocalStorage = (key, value) => {
+  if (value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+};
+
+const navigate = (path) => {
+  window.location.href = path;
+};
+
+const findElement = (className, classLists, content) => {
+  let element = document.querySelector(className);
+  if (classLists && Array.isArray(classLists)) {
+    classLists.map((classList) => {
+      element.classList.add(classList);
+    });
+  }
+  if (content) {
+    element.textContent = content;
+  }
+  return element;
+};
+
 window.onload = function () {
-    fetch('https://jsonplaceholder.typicode.com/users')
-        .then(response => response.json())
-        .then(data => {
-            const container = document.querySelector('.container');
-            container.classList.add('container');
+  fetch("https://jsonplaceholder.typicode.com/users")
+    .then((response) => response.json())
+    .then((data) => {
+      const container = findElement(".container", ["container"]);
 
-            const userTitle = document.createElement('h1');
-            userTitle.classList.add('user-info-mainTitle');
-            userTitle.textContent = 'Users:';
-            container.appendChild(userTitle);
+      const userTitle = createElement("h1", ["user-info-mainTitle"], "Users:");
+      container.appendChild(userTitle);
 
-            const usersDiv = document.createElement('div');
-            usersDiv.classList.add('wrapper');
+      const usersDiv = createElement("div", ["wrapper"]);
 
-            data.forEach(user => {
-                const userDiv = document.createElement('div');
+      data.forEach((user) => {
+        const userDiv = createElement("div", ["user"]);
+        userDiv.addEventListener("click", () => {
+          setLocalStorage("currentUserId", user.id);
+          navigate("user-details.html");
+        });
 
-                userDiv.addEventListener('click', () => {
-                    localStorage.setItem('currentUserId', JSON.stringify(user.id));
-                    window.location.href = 'user-details.html';
-                });
-                userDiv.classList.add('user');
+        const userId = createElement(
+          "span",
+          ["user-info-id"],
+          `ID: ${user.id}`
+        );
+        userDiv.appendChild(userId);
 
-                const userId = document.createElement('span');
-                userId.classList.add('user-info-id');
-                userId.textContent = `ID: ${user.id}`;
-                userDiv.appendChild(userId);
+        const userTitle = createElement(
+          "h2",
+          ["user-info-title"],
+          `Name: ${user.name}`
+        );
+        userDiv.appendChild(userTitle);
 
-                const userTitle = document.createElement('h2');
-                userTitle.classList.add('user-info-title');
-                userTitle.textContent = `Name: ${user.name}`;
-                userDiv.appendChild(userTitle);
+        const button = createElement(
+          "button",
+          ["userDetail-button"],
+          "Details"
+        );
+        button.addEventListener("click", () => {
+          setLocalStorage("currentUserId", user.id);
+          navigate("user-details.html");
+        });
 
-                const button = document.createElement('button');
-                button.classList.add('userDetail-button');
-                button.textContent = 'Details';
-                button.addEventListener('click', () => {
-                    localStorage.setItem('currentUserId', JSON.stringify(user.id));
-                    window.location.href = 'user-details.html';
-                });
+        userDiv.appendChild(button);
+        usersDiv.appendChild(userDiv);
+      });
 
-                userDiv.appendChild(button);
-                usersDiv.appendChild(userDiv);
-
-            });
-
-            container.appendChild(usersDiv);
-
-
-        })
-        .catch(error => console.error('Error fetching users:', error));
+      container.appendChild(usersDiv);
+    })
+    .catch((error) => console.error("Error fetching users:", error));
 };

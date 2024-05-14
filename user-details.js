@@ -1,40 +1,80 @@
-window.onload = function () {
-  const openPosts = (commentsButton) => {
-    const usersPosts = document.querySelector(".users-posts");
-    usersPosts.classList.toggle("hidden");
-    commentsButton.textContent = "Comments";
-    if (usersPosts.classList.contains("hidden")) {
-      commentsButton.textContent = "Comments";
-    } else {
-      commentsButton.textContent = "Hide";
-    }
-  };
+const renderUserProperties = (
+  elementClasNames,
+  value,
+  label,
+  labelClassNames,
+  rootElement
+) => {
+  const elementWrapper = document.createElement("div");
+  const element = document.createElement("p");
+  const labelElement = document.createElement("span");
 
-  const findElement = (className, classLists, content) => {
-    let element = document.querySelector(className);
-    if (classLists && Array.isArray(classLists)) {
-      classLists.map((classList) => {
-        element.classList.add(classList);
-      });
-    }
-    if (content) {
-      element.textContent = content;
-    }
-    return element;
-  };
-
-  const createElement = (typeElement, classLists, content) => {
-    const element = document.createElement(typeElement);
-    if (classLists && Array.isArray(classLists)) {
-      classLists.map((classList) => {
-        element.classList.add(classList);
-      });
-    }
+  if (labelClassNames && Array.isArray(labelClassNames)) {
+    labelClassNames.map((className) => {
+      labelElement.classList.add(className);
+    });
+  }
+  labelElement.textContent = `${label ?? "label"}:`;
+  if (elementClasNames && Array.isArray(elementClasNames)) {
+    elementClasNames.map((className) => {
+      element.classList.add(className);
+    });
+  }
+  element.textContent = `${value ?? "N/A"}`;
+  elementWrapper.appendChild(labelElement);
+  elementWrapper.appendChild(element);
+  rootElement.appendChild(elementWrapper);
+};
+const createElement = (typeElement, classLists, content) => {
+  const element = document.createElement(typeElement);
+  if (classLists && Array.isArray(classLists)) {
+    classLists.map((classList) => {
+      element.classList.add(classList);
+    });
+  }
+  element.textContent = content;
+  return element;
+};
+const renderPosts = (clasName, comment, index, rootElement) => {
+  const userComment = createElement("div", ["user-comments"], "");
+  userComment.addEventListener("click", () => {
+    localStorage.setItem("currentCommentId", JSON.stringify(comment.id));
+    window.location.href = "user-comment.html";
+  });
+  const element = createElement(
+    "h1",
+    [clasName],
+    `${index + 1}:  ${comment.title ?? "N/A"}`
+  );
+  userComment.appendChild(element);
+  rootElement.appendChild(userComment);
+};
+const findElement = (className, classLists, content) => {
+  let element = document.querySelector(className);
+  if (classLists && Array.isArray(classLists)) {
+    classLists.map((classList) => {
+      element.classList.add(classList);
+    });
+  }
+  if (content) {
     element.textContent = content;
-    return element;
-  };
+  }
+  return element;
+};
+const openPosts = (commentsButton) => {
+  const usersPosts = document.querySelector(".users-posts");
+  usersPosts.classList.toggle("hidden");
+  commentsButton.textContent = "Comments";
+  if (usersPosts.classList.contains("hidden")) {
+    commentsButton.textContent = "Comments";
+  } else {
+    commentsButton.textContent = "Hide";
+  }
+};
 
+window.onload = function () {
   const currentUserId = JSON.parse(localStorage.getItem("currentUserId"));
+
   fetch(`https://jsonplaceholder.typicode.com/users/${currentUserId}`)
     .then((response) => response.json())
     .then((currentUser) => {
@@ -49,37 +89,6 @@ window.onload = function () {
         );
         mainTitleWrapper.appendChild(mainTitle);
 
-        const renderFunction = (
-          elementClasNames,
-          value,
-          label,
-          labelClassNames
-        ) => {
-          const elementWrapper = document.createElement("div");
-          const element = document.createElement("p");
-          const labelElement = document.createElement("span");
-
-          if (labelClassNames && Array.isArray(labelClassNames)) {
-            labelClassNames.map((className) => {
-              labelElement.classList.add(className);
-            });
-          } else {
-            labelElement.classList.add("label");
-          }
-          labelElement.textContent = `${label ?? "label"}:`;
-          if (elementClasNames && Array.isArray(elementClasNames)) {
-            elementClasNames.map((className) => {
-              labelElement.classList.add(className);
-            });
-          } else {
-            element.classList.add("text");
-          }
-          element.textContent = `${value ?? "N/A"}`;
-          elementWrapper.appendChild(labelElement);
-          elementWrapper.appendChild(element);
-          userDetails.appendChild(elementWrapper);
-        };
-
         for (const property in currentUser) {
           if (
             typeof currentUser[property] === "object" &&
@@ -93,28 +102,31 @@ window.onload = function () {
               ) {
                 const deeplyNestedObject = nestedObject[nestedProperty];
                 for (const deeplyNestedProperty in deeplyNestedObject) {
-                  renderFunction(
-                    ["text", "textColorRed"],
+                  renderUserProperties(
+                    ["text", "textColorBlue"],
                     deeplyNestedObject[deeplyNestedProperty],
                     `${property}.${nestedProperty}.${deeplyNestedProperty}`,
-                    ["label"]
+                    ["label"],
+                    userDetails
                   );
                 }
               } else {
-                renderFunction(
-                  ["text", "textColorRed"],
+                renderUserProperties(
+                  ["text", "textColorGreen"],
                   nestedObject[nestedProperty],
                   `${property}.${nestedProperty}`,
-                  ["label"]
+                  ["label"],
+                  userDetails
                 );
               }
             }
           } else {
-            renderFunction(
+            renderUserProperties(
               ["text", "textColorRed"],
               currentUser[property],
               property,
-              ["label"]
+              ["label"],
+              userDetails
             );
           }
         }
@@ -148,6 +160,7 @@ window.onload = function () {
       }
     })
     .catch((error) => console.error("Error fetching current user:", error));
+
   fetch(`https://jsonplaceholder.typicode.com/users/${currentUserId}/posts`)
     .then((response) => response.json())
     .then((comments) => {
@@ -164,29 +177,12 @@ window.onload = function () {
         );
         usersPosts.appendChild(userPostsTitle);
 
-        const renderPosts = (clasName, comment, index) => {
-          const userComment = createElement("div", ["user-comments"], "");
-          userComment.addEventListener("click", () => {
-            localStorage.setItem(
-              "currentCommentId",
-              JSON.stringify(comment.id)
-            );
-            window.location.href = "user-comment.html";
-          });
-          const element = createElement(
-            "h1",
-            [clasName],
-            `${index + 1}:  ${comment.title ?? "N/A"}`
-          );
-          userComment.appendChild(element);
-          usersPosts.appendChild(userComment);
-        };
-
         comments.map((comment, index) => {
-          renderPosts("text", comment, index);
+          renderPosts("text", comment, index, usersPosts);
         });
       } else {
         console.error("Current users comments data not found.");
       }
-    });
+    })
+    .catch((error) => console.error("Error fetching current user:", error));
 };

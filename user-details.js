@@ -164,6 +164,7 @@ window.onload = function () {
   fetch(`https://jsonplaceholder.typicode.com/users/${currentUserId}/posts`)
     .then((response) => response.json())
     .then((comments) => {
+      console.log("comments", comments);
       if (comments) {
         const usersPosts = findElement(".users-posts", [
           "hidden",
